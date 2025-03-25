@@ -40,7 +40,7 @@ public class AutorizacaoController {
 	
 	private static final String CLIENT_ID = "b45f4fd9-ce0f-4064-8872-bb19d02dc873";
 	private static final String CLIENT_SECRET = "d457b64e-48f1-485d-9939-2ca9ad6f4a42";
-    private static final String REDIRECT_URI = "http://localhost:8080/auth/callback";
+    private static final String REDIRECT_URI = "https://hubspot-production-e626.up.railway.app/auth/callback";
     private static final String TOKEN_URL = "https://api.hubapi.com/oauth/v1/token";
    // private static final String API_URL = "https://api.hubapi.com/contacts/v1/lists/all/contacts/all?count=1";
     

@@ -128,7 +128,7 @@ public class ContratoController {
         requestBody.add("grant_type", "refresh_token");
         requestBody.add("client_id", token.getClientId());
         requestBody.add("client_secret", token.getClientSecret());
-        requestBody.add("redirect_uri", "http://localhost:8080/contato/salvar");
+        requestBody.add("redirect_uri", "https://hubspot-production-e626.up.railway.app/contato/salvar");
         requestBody.add("refresh_token", token.getRefreshToken());
 
      // Configurando os cabeçalhos para o tipo de mídia correto

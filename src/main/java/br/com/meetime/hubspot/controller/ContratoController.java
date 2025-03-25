@@ -17,7 +17,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +33,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.meetime.hubspot.model.Token;
 import br.com.meetime.hubspot.repository.TokenRepository;
 import br.com.meetime.hubspot.service.TokenService;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 
 
@@ -173,8 +172,8 @@ public class ContratoController {
             return token;
     }
 	
-    @GetMapping("/webhook")
-    public Map<String, Object> processarWebhook(Map<String, Object> payload) {
+    @PostMapping("/webhook")
+    public Map<String, Object> processarWebhook(@RequestBody Map<String, Object> payload) {
         System.out.println("Webhook recebido: " + payload);
         return payload;
     }

@@ -1,6 +1,8 @@
 package br.com.meetime.hubspot.controller;
 
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -86,10 +88,9 @@ public class ContratoController {
                     responseBody.put("token", tokenRenovado.getAccessToken());
                     
                     
-                    
-                    responseBody.put("webhookData", processarWebhook(requestBody));
-                    
-                    
+                    Map<String, Object> webhookData = processarWebhook(requestBody); // Processa o webhook
+                    String webhookDataString = URLEncoder.encode(new ObjectMapper().writeValueAsString(webhookData), StandardCharsets.UTF_8);
+                    responseBody.put("webhookData", webhookDataString);
                     
                     return ResponseEntity.ok(responseBody);
                 } else {

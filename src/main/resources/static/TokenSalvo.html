@@ -75,10 +75,10 @@
         <div id="message"></div>
 
         <!-- Box para exibir informações do webhook -->
-        <div id="webhook-box" class="webhook-box">
-            <h3>Informações do Webhook</h3>
-            <div id="webhook-content"></div>
-        </div>
+        <div id="webhook-box" style="display:none; background-color: #f4f4f4; padding: 20px; border-radius: 10px; margin-top: 20px;">
+		    <h2>Dados do Webhook:</h2>
+		    <pre id="webhook-content" style="white-space: pre-wrap;"></pre> <!-- Aqui os dados serão exibidos -->
+		</div>
     </div>
 
     <script>
@@ -92,7 +92,7 @@
             const success = getQueryParam('success');
             const error = getQueryParam('error');
             const token = getQueryParam('token');
-            const webhookData = getQueryParam('webhookData'); // Parâmetro com dados do webhook
+            const webhookData = getQueryParam('webhookData'); // Recebendo o parâmetro webhookData
 
             if (success) {
                 document.getElementById('message').innerHTML = '<p style="color: green;">' + decodeURIComponent(success) + '</p>';
@@ -105,10 +105,15 @@
             }
 
             if (webhookData) {
-                // Mostrar o box com os dados do webhook
-                const webhookContent = JSON.parse(decodeURIComponent(webhookData));
-                document.getElementById('webhook-content').innerHTML = JSON.stringify(webhookContent, null, 2);
-                document.getElementById('webhook-box').style.display = 'block'; // Exibir o box
+                try {
+                    const webhookContent = JSON.parse(decodeURIComponent(webhookData)); // Decodificando o webhookData
+                    console.log(webhookContent); // Verifique no console se os dados estão corretos
+                    document.getElementById('webhook-content').innerHTML = JSON.stringify(webhookContent, null, 2);
+                    document.getElementById('webhook-box').style.display = 'block'; // Exibir o box
+                } catch (e) {
+                    console.error('Erro ao processar os dados do webhook', e);
+                    document.getElementById('webhook-content').innerHTML = 'Erro ao processar os dados do webhook.';
+                }
             }
         };
 

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Contato</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: gray;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #0073e6;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #004a99;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastro de Contato</h1>
+        <input type="hidden" id="token" value="">
+        <input type="text" placeholder="Nome" id="nome" required>
+        <input type="text" placeholder="Sobrenome" id="sobrenome" required>
+        <input type="email" placeholder="E-mail" id="email" required>
+        <button class="btn" onclick="salvarContato()">Salvar</button>
+        
+        <div id="message"></div>
+    </div>
+
+    <script>
+        // Captura parâmetros da URL para exibir mensagens de erro ou sucesso
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        window.onload = function() {
+            const success = getQueryParam('success');
+            const error = getQueryParam('error');
+            const token = getQueryParam('token');
+
+            if (success) {
+                document.getElementById('message').innerHTML = '<p style="color: green;">' + decodeURIComponent(success) + '</p>';
+            } else if (error) {
+                document.getElementById('message').innerHTML = '<p style="color: red;">' + decodeURIComponent(error) + '</p>';
+            }
+            
+            if (token) {
+                document.getElementById('token').value = token;
+            }
+        };
+
+        // Envia os dados do contato para o backend
+        function salvarContato() {
+            const nome = document.getElementById('nome').value.trim();
+            const sobrenome = document.getElementById('sobrenome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const token = document.getElementById('token').value.trim();
+
+            if (!nome || !sobrenome || !email) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            const contato = {
+                nome: nome,
+                sobrenome: sobrenome,
+                email: email,
+                token: token
+            };
+
+            fetch('/contato/salvar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(contato)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                	const successMessage = encodeURIComponent(data.message);
+                    const token = data.token; // Agora você tem o token da resposta
+                    window.location.href = "/TokenSalvo.html?success=" + successMessage + "&token=" + token;
+                } else {
+                    window.location.href = "/TokenSalvo.html?error=" + encodeURIComponent(data.message);
+                }
+            })
+            .catch(error => {
+                window.location.href = "/TokenSalvo.html?error=" + encodeURIComponent("Erro ao salvar o contato.");
+            });
+        }
+    </script>
+</body>
+</html>

@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,6 +84,13 @@ public class ContratoController {
                     responseBody.put("success", true);
                     responseBody.put("message", "Contato cadastrado com sucesso!");
                     responseBody.put("token", tokenRenovado.getAccessToken());
+                    
+                    
+                    
+                    responseBody.put("webhookData", processarWebhook(requestBody));
+                    
+                    
+                    
                     return ResponseEntity.ok(responseBody);
                 } else {
                     Map<String, Object> responseBody = new HashMap<>();
@@ -164,6 +172,11 @@ public class ContratoController {
             return token;
     }
 	
+    @GetMapping("/webhook")
+    public Map<String, Object> processarWebhook(Map<String, Object> payload) {
+        System.out.println("Webhook recebido: " + payload);
+        return payload;
+    }
     
     
     

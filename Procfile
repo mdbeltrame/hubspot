@@ -1,1 +1,1 @@
-web: java -jar target/hubspot.jar
+web: java -jar target/hubspot-0.0.1-SNAPSHOT.jar

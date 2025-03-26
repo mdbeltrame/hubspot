@@ -92,7 +92,6 @@
             const success = getQueryParam('success');
             const error = getQueryParam('error');
             const token = getQueryParam('token');
-            let webhookData = getQueryParam('webhookData'); // Recebendo o parâmetro webhookData
 
             if (success) {
                 document.getElementById('message').innerHTML = '<p style="color: green;">' + decodeURIComponent(success) + '</p>';
@@ -104,23 +103,9 @@
                 document.getElementById('token').value = token;
             }
 
-            if (webhookData) {
-                // Decodifica a string e remove as aspas extras
-                webhookData = decodeURIComponent(webhookData);
-
-                // Remove as aspas extras no início e no final
-                if (webhookData.startsWith('"') && webhookData.endsWith('"')) {
-                    webhookData = webhookData.slice(1, -1);
-                }
-
-                try {
-                    const webhookContent = JSON.parse(webhookData);
-                    document.getElementById('webhook-content').innerText = JSON.stringify(webhookContent, null, 2);
-                    document.getElementById('webhook-box').style.display = 'block'; // Exibe o box com os dados do webhook
-                } catch (error) {
-                    console.error("Erro ao processar o JSON do webhook:", error);
-                }
-            }
+            setTimeout(fetchWebhookData(),2000);
+            
+            
         };
 
         // Envia os dados do contato para o backend
@@ -162,6 +147,25 @@
             .catch(error => {
                 window.location.href = "/TokenSalvo.html?error=" + encodeURIComponent("Erro ao salvar o contato.");
             });
+        }
+        
+        // Busca os dados do webhook e exibe na div
+        function fetchWebhookData() {
+            fetch('/api/webhook-data')
+                .then(response => {
+                    if (response.status === 204) {
+                        console.log("Nenhum dado de webhook disponível.");
+                        return null;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data) {
+                        document.getElementById('webhook-content').innerText = JSON.stringify(data, null, 2);
+                        document.getElementById('webhook-box').style.display = 'block';
+                    }
+                })
+                .catch(error => console.error("Erro ao buscar webhook data:", error));
         }
     </script>
 </body>

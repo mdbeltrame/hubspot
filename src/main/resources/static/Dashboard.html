@@ -27,6 +27,14 @@
             color: #333;
             margin-bottom: 20px;
         }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
         .btn {
             display: inline-block;
             padding: 12px 25px;
@@ -38,6 +46,7 @@
             font-weight: bold;
             transition: 0.3s;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top:10px;
         }
         .btn:hover {
             background: #004a99;
@@ -51,7 +60,6 @@
          <input type="text" placeholder="Client_Id" id="clientId" required>
          <input type="text" placeholder="Client_Secret" id="clientSecret" required>
          <button class="btn" onclick="salvarContato()">Autorizar</button>
-        <a href="/auth/authorize" class="btn">Autorizar</a>
         
          <div id="message"></div>
     </div>
@@ -70,7 +78,7 @@
         	clientSecret: clientSecret
         };
 
-        fetch('/authorize', {
+        fetch('/auth/authorize', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

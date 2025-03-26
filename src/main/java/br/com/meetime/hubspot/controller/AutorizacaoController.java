@@ -60,8 +60,7 @@ public class AutorizacaoController {
                 
         
     	//return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(authUrl)).build();
-    	response.sendRedirect(authUrl); // Redireciona diretamente
-        return ResponseEntity.ok().build();
+    	return ResponseEntity.ok(authUrl);
     }
     
     @GetMapping("/callback")

@@ -73,18 +73,18 @@
             return;
         }
 
-        const autorizacao = {
-        	clientId: clientId,
-        	clientSecret: clientSecret
-        };
+        const autorizacao = { clientId, clientSecret };
 
         fetch('/auth/authorize', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(autorizacao)
         })
+        .then(response => response.text()) // Pega a URL da resposta
+        .then(authUrl => {
+            window.location.href = authUrl; // Redireciona para o HubSpot
+        })
+        .catch(error => console.error('Erro:', error));
     }
     
     </script>

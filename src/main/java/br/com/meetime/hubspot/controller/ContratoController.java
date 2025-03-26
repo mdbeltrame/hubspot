@@ -87,7 +87,7 @@ public class ContratoController {
                     responseBody.put("token", tokenRenovado.getAccessToken());
                     
                     
-                    Map<String, Object> webhookData = processarWebhook(requestBody); // Processa o webhook
+                    Map<String, Object> webhookData = processarWebhook(requestBody).getBody();// Processa o webhook
                     String webhookDataString = URLEncoder.encode(new ObjectMapper().writeValueAsString(webhookData), StandardCharsets.UTF_8)
                             .replaceAll("\\+", "%20"); // Substitui "+" por "%20" para evitar problemas na URL
                     responseBody.put("webhookData", webhookDataString);
@@ -174,9 +174,9 @@ public class ContratoController {
     }
 	
     @PostMapping(value = "/webhook", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Object> processarWebhook(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<Map<String, Object>> processarWebhook(@RequestBody Map<String, Object> payload) {
         System.out.println("Webhook recebido: " + payload);
-        return payload;
+        return ResponseEntity.ok(payload);
     }
     
     

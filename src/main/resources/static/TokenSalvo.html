@@ -105,15 +105,10 @@
             }
 
             if (webhookData) {
-                try {
-                    const webhookContent = JSON.parse(decodeURIComponent(webhookData)); // Decodificando o webhookData
-                    console.log(webhookContent); // Verifique no console se os dados estão corretos
-                    document.getElementById('webhook-content').innerHTML = JSON.stringify(webhookContent, null, 2);
-                    document.getElementById('webhook-box').style.display = 'block'; // Exibir o box
-                } catch (e) {
-                    console.error('Erro ao processar os dados do webhook', e);
-                    document.getElementById('webhook-content').innerHTML = 'Erro ao processar os dados do webhook.';
-                }
+                // Mostrar o box com os dados do webhook
+                const webhookContent = JSON.parse(decodeURIComponent(webhookData));
+                document.getElementById('webhook-content').innerHTML = JSON.stringify(webhookContent, null, 2);
+                document.getElementById('webhook-box').style.display = 'block'; // Exibir o box
             }
         };
 

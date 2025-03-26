@@ -1,0 +1,32 @@
+Dependências e Decisões Técnicas
+
+Frameworks e Bibliotecas Utilizadas
+
+O projeto foi desenvolvido com Java 21 e Spring Boot 3.4.4, garantindo um ambiente moderno e eficiente. Escolhemos essas tecnologias por sua confiabilidade e facilidade de integração com serviços externos, como a HubSpot. Aqui estão algumas das principais dependências que utilizamos:
+
+Spring Boot Starter Web: Facilita a criação de APIs REST.
+Spring Boot Starter Security: Implementa autenticação e controle de acesso.
+Spring Boot Starter OAuth2 Client: Responsável pela autenticação segura com a HubSpot.
+Spring Boot Starter Data JPA: Permite interagir com o banco de dados de forma mais simples.
+MySQL Connector-J: Para conexão eficiente com o banco de dados MySQL.
+Jackson Databind: Facilita a manipulação de dados em JSON.
+Lombok: Reduz a quantidade de código repetitivo (boilerplate).
+Spring Boot Starter Test e Spring Security Test: Para garantir a qualidade e segurança da aplicação.
+
+Muitas dessas libs eu acabo utilizando no trabalho atual, então preferi utilizar ela nesse teste.
+
+Por que escolhemos essas tecnologias?
+
+Spring Boot é uma escolha natural para aplicações web modernas devido à sua simplicidade e suporte a padrões de mercado.
+
+OAuth2 Client foi implementado para facilitar o processo de autenticação com APIs externas de forma segura.
+
+JPA e MySQL garantem uma gestão eficiente dos dados da aplicação.
+
+Lombok ajuda a escrever menos código, tornando o projeto mais enxuto e legível.
+
+Melhorias Futuras
+
+Adicionar logs mais detalhados para monitoramento de eventos e erros, facilitando a análise de problemas.
+Melhorar a interface do usuário, tornando a experiência de cadastro de contatos mais fluida e intuitiva.
+Implementar notificações para que o usuário saiba quando eventos importantes ocorrem na API.

@@ -105,16 +105,21 @@
             }
 
             if (webhookData) {
-            	const decodedWebhookData = decodeURIComponent(webhookData);
+                // Decodifica a string e remove as aspas extras
+                webhookData = decodeURIComponent(webhookData);
 
-            	// Remove aspas extras se existirem
-            	if (decodedWebhookData.startsWith('"') && decodedWebhookData.endsWith('"')) {
-            	    decodedWebhookData = decodedWebhookData.slice(1, -1);
-            	}
+                // Remove as aspas extras no início e no final
+                if (webhookData.startsWith('"') && webhookData.endsWith('"')) {
+                    webhookData = webhookData.slice(1, -1);
+                }
 
-            	const webhookContent = JSON.parse(decodedWebhookData);
-            	document.getElementById('webhook-content').innerHTML = JSON.stringify(webhookContent, null, 2);
-            	document.getElementById('webhook-box').style.display = 'block'; // Exibir o box
+                try {
+                    const webhookContent = JSON.parse(webhookData);
+                    document.getElementById('webhook-content').innerText = JSON.stringify(webhookContent, null, 2);
+                    document.getElementById('webhook-box').style.display = 'block'; // Exibe o box com os dados do webhook
+                } catch (error) {
+                    console.error("Erro ao processar o JSON do webhook:", error);
+                }
             }
         };
 

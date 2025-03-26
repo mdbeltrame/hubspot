@@ -42,7 +42,6 @@ public class ContatoController {
 	
     @PostMapping("/salvar")
     public ResponseEntity<Map<String, Object>> salvarContato(@RequestBody Map<String, String> contato) throws JsonMappingException, JsonProcessingException {
-        
     	
     	Optional<Token> token = tokenRepository.findByaccessToken(contato.get("token"));
     	Token tokenRenovado = new Token();
@@ -96,30 +95,21 @@ public class ContatoController {
     
     public Boolean isTokenValido(Token token) {
         if (token.getCodigo() == null) {
-            return false; // Token não encontrado
+            return false;
         }
 
-        Integer expiresIn = token.getExpiresIn(); // Tempo de expiração em segundos
+        Integer expiresIn = token.getExpiresIn();
         LocalDate dataSalvamento = token.getDataSalvamento();
         LocalTime horaSalvamento = token.getHoraSalvamento();
-
-        // Criar um LocalDateTime a partir da data e hora de salvamento
         LocalDateTime dataHoraSalvamento = LocalDateTime.of(dataSalvamento, horaSalvamento);
-
-        // Somar o tempo de expiração ao momento do salvamento
         LocalDateTime dataHoraExpiracao = dataHoraSalvamento.plusSeconds(expiresIn);
-
-        // Obter o horário atual
         LocalDateTime agora = LocalDateTime.now();
-
-        // Comparar se o token ainda é válido
         return agora.isBefore(dataHoraExpiracao);
     }
     
     public Token renovarToken(Token token) throws JsonMappingException, JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
 
-        // Criando o corpo da requisição como um Map (irá virar JSON)
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("grant_type", "refresh_token");
         requestBody.add("client_id", token.getClientId());
@@ -127,20 +117,12 @@ public class ContatoController {
         requestBody.add("redirect_uri", "https://hubspot-production-e626.up.railway.app/contato/salvar");
         requestBody.add("refresh_token", token.getRefreshToken());
 
-     // Configurando os cabeçalhos para o tipo de mídia correto
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        // Criando a entidade HTTP com o corpo e os cabeçalhos
-        //HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
-
-     // Criando a entidade HTTP corretamente com tipo explícito
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(requestBody, headers);
-        
-            ResponseEntity<String> response = restTemplate.exchange("https://api.hubapi.com/oauth/v1/token", HttpMethod.POST, requestEntity, String.class);
+        ResponseEntity<String> response = restTemplate.exchange("https://api.hubapi.com/oauth/v1/token", HttpMethod.POST, requestEntity, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                // Converter a resposta JSON para extrair os tokens
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode jsonNode = objectMapper.readTree(response.getBody());
 
@@ -151,7 +133,6 @@ public class ContatoController {
                 token.setRefreshToken(novoRefreshToken);
                 token.setDataSalvamento(LocalDate.now());
                 token.setHoraSalvamento(LocalTime.now());
-                // Salvar o token no banco de dados
                 tokenService.salvar(token);
                 
             } else {

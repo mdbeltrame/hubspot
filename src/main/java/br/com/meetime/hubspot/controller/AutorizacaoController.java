@@ -1,7 +1,6 @@
 package br.com.meetime.hubspot.controller;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -40,10 +38,6 @@ public class AutorizacaoController {
 	@Autowired
 	private TokenService tokenService;
 	
-	
-	//private String CLIENT_ID = "b45f4fd9-ce0f-4064-8872-bb19d02dc873";
-	//private String CLIENT_SECRET = "d457b64e-48f1-485d-9939-2ca9ad6f4a42";
-	
 	private String CLIENT_ID;
 	private String CLIENT_SECRET;
     
@@ -57,9 +51,7 @@ public class AutorizacaoController {
                 "?client_id="+CLIENT_ID+
                 "&scope=crm.objects.contacts.write%20crm.objects.contacts.read%20oauth"+
     			"&redirect_uri=https://hubspot-production-e626.up.railway.app/auth/callback";
-                
         
-    	//return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(authUrl)).build();
     	return ResponseEntity.ok(authUrl);
     }
     
@@ -72,20 +64,18 @@ public class AutorizacaoController {
         requestBody.add("redirect_uri", "https://hubspot-production-e626.up.railway.app/auth/callback");
         requestBody.add("code", code);
 
-        // Configurando os cabeçalhos da requisição
+        // Configura o cabeçalho da requisição
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         // Criando a entidade HTTP com os parâmetros e cabeçalhos
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
-
-        // Enviando a requisição POST para a URL de token
         RestTemplate restTemplate = new RestTemplate();
         try {
             // Envia a requisição e recebe a resposta
             ResponseEntity<String> response = restTemplate.exchange("https://api.hubapi.com/oauth/v1/token", HttpMethod.POST, requestEntity, String.class);
             
-         // Processar a resposta JSON
+         // Processa o JSON
             String jsonResponse = response.getBody();
             
                 // Usando Jackson para ler o JSON
@@ -111,14 +101,12 @@ public class AutorizacaoController {
                 // Salvar o token no banco de dados
                 tokenService.salvar(token);
                 
-                // Redireciona com uma mensagem de sucesso
+                // Redireciona com uma mensagem de sucesso e com o token para conseguir cadastrar novos contatos na mesma tela
                 return new RedirectView("/TokenSalvo.html?success=Token%20Gerado%20Com%20Sucesso&token=" + URLEncoder.encode(accessToken, StandardCharsets.UTF_8));
             } catch (Exception e) {
                 // Retorna erro caso algo dê errado
                 return new RedirectView("/Dashboard.html?error=Erro%20ao%20trocar%20c%C3%B3digo%20pelo%20token.");
             }
-		
     }
-	
     
 }

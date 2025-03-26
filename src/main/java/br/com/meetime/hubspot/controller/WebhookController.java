@@ -29,7 +29,7 @@ public class WebhookController {
     public ResponseEntity<?> getWebhookData() {
         List<Map<String, Object>> data = lastWebhookData.get();
         if (data == null || data.isEmpty()) {
-            return ResponseEntity.noContent().build(); // Nenhum dado disponível ainda
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(data);
     }

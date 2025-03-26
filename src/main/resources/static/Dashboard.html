@@ -80,9 +80,9 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(autorizacao)
         })
-        .then(response => response.text()) // Pega a URL da resposta
+        .then(response => response.text())
         .then(authUrl => {
-            window.location.href = authUrl; // Redireciona para o HubSpot
+            window.location.href = authUrl;
         })
         .catch(error => console.error('Erro:', error));
     }

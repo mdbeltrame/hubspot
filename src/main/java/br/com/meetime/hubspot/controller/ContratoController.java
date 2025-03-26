@@ -88,7 +88,8 @@ public class ContratoController {
                     
                     
                     Map<String, Object> webhookData = processarWebhook(requestBody); // Processa o webhook
-                    String webhookDataString = URLEncoder.encode(new ObjectMapper().writeValueAsString(webhookData), StandardCharsets.UTF_8);
+                    String webhookDataString = URLEncoder.encode(new ObjectMapper().writeValueAsString(webhookData), StandardCharsets.UTF_8)
+                            .replaceAll("\\+", "%20"); // Substitui "+" por "%20" para evitar problemas na URL
                     responseBody.put("webhookData", webhookDataString);
                     
                     return ResponseEntity.ok(responseBody);

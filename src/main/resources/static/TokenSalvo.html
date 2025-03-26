@@ -105,10 +105,16 @@
             }
 
             if (webhookData) {
-                // Mostrar o box com os dados do webhook
-                const webhookContent = JSON.parse(decodeURIComponent(webhookData));
-                document.getElementById('webhook-content').innerHTML = JSON.stringify(webhookContent, null, 2);
-                document.getElementById('webhook-box').style.display = 'block'; // Exibir o box
+            	const decodedWebhookData = decodeURIComponent(webhookData);
+
+            	// Remove aspas extras se existirem
+            	if (decodedWebhookData.startsWith('"') && decodedWebhookData.endsWith('"')) {
+            	    decodedWebhookData = decodedWebhookData.slice(1, -1);
+            	}
+
+            	const webhookContent = JSON.parse(decodedWebhookData);
+            	document.getElementById('webhook-content').innerHTML = JSON.stringify(webhookContent, null, 2);
+            	document.getElementById('webhook-box').style.display = 'block'; // Exibir o box
             }
         };
 

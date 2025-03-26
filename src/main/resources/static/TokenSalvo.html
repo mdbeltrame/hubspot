@@ -92,7 +92,7 @@
             const success = getQueryParam('success');
             const error = getQueryParam('error');
             const token = getQueryParam('token');
-            const webhookData = getQueryParam('webhookData'); // Recebendo o parâmetro webhookData
+            let webhookData = getQueryParam('webhookData'); // Recebendo o parâmetro webhookData
 
             if (success) {
                 document.getElementById('message').innerHTML = '<p style="color: green;">' + decodeURIComponent(success) + '</p>';

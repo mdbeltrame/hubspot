@@ -173,7 +173,7 @@ public class ContratoController {
             return token;
     }
 	
-    @PostMapping("/webhook")
+    @PostMapping(value = "/webhook", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> processarWebhook(@RequestBody Map<String, Object> payload) {
         System.out.println("Webhook recebido: " + payload);
         return payload;

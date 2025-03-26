@@ -48,35 +48,37 @@
 <body>
     <div class="container">
         <h1>Bem Vindo ao HubSpot</h1>
+         <input type="text" placeholder="Client_Id" id="clientId" required>
+         <input type="text" placeholder="Client_Secret" id="clientSecret" required>
+         <button class="btn" onclick="salvarContato()">Autorizar</button>
         <a href="/auth/authorize" class="btn">Autorizar</a>
         
          <div id="message"></div>
     </div>
     <script>
- 	// Verifica se há parâmetros na URL
-    function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
+    function salvarContato() {
+        const clientId = document.getElementById('clientId').value.trim();
+        const clientSecret = document.getElementById('clientSecret').value.trim();
+
+        if (!clientId || !clientSecret) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+
+        const autorizacao = {
+        	clientId: clientId,
+        	clientSecret: clientSecret
+        };
+
+        fetch('/authorize', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(autorizacao)
+        })
     }
-
-    // Exibe a mensagem com base no parâmetro de erro ou sucesso
-    window.onload = function() {
-    	  const error = getQueryParam('error');
-
-        if (error) {
-        	document.getElementById('message').innerHTML = '<p style="color: red;">' + decodeURIComponent(error) + '</p>';
-        
-        }
-    };
     
-        function salvarContato() {
-            const nome = document.getElementById('nomeContato').value;
-            if (nome.trim() === '') {
-                alert('Por favor, preencha o nome do contato.');
-                return;
-            }
-            alert('Contato "' + nome + '" salvo com sucesso!');
-        }
     </script>
     
 </body>

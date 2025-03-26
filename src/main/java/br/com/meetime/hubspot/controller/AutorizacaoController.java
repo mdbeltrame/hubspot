@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -17,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,23 +41,27 @@ public class AutorizacaoController {
 	private TokenService tokenService;
 	
 	
-	private static final String CLIENT_ID = "b45f4fd9-ce0f-4064-8872-bb19d02dc873";
-	private static final String CLIENT_SECRET = "d457b64e-48f1-485d-9939-2ca9ad6f4a42";
-    private static final String REDIRECT_URI = "https://hubspot-production-e626.up.railway.app/auth/callback";
-    private static final String TOKEN_URL = "https://api.hubapi.com/oauth/v1/token";
-   // private static final String API_URL = "https://api.hubapi.com/contacts/v1/lists/all/contacts/all?count=1";
+	//private String CLIENT_ID = "b45f4fd9-ce0f-4064-8872-bb19d02dc873";
+	//private String CLIENT_SECRET = "d457b64e-48f1-485d-9939-2ca9ad6f4a42";
+	
+	private String CLIENT_ID;
+	private String CLIENT_SECRET;
     
-    @GetMapping("/authorize")
-    public ResponseEntity<String> generateAuthUrl(HttpServletResponse response) throws IOException {
+    @PostMapping("/authorize")
+    public ResponseEntity<String> generateAuthUrl(HttpServletResponse response,@RequestBody Map<String, String> autorizacao) throws IOException {
     	
+    	this.CLIENT_ID = autorizacao.get("clientId");
+    	this.CLIENT_SECRET = autorizacao.get("clientSecret");
     	
     	String authUrl = "https://app.hubspot.com/oauth/authorize" +
                 "?client_id="+CLIENT_ID+
                 "&scope=crm.objects.contacts.write%20crm.objects.contacts.read%20oauth"+
-    			"&redirect_uri=" + REDIRECT_URI;
+    			"&redirect_uri=https://hubspot-production-e626.up.railway.app/auth/callback";
                 
         
-    	return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(authUrl)).build();
+    	//return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(authUrl)).build();
+    	response.sendRedirect(authUrl); // Redireciona diretamente
+        return ResponseEntity.ok().build();
     }
     
     @GetMapping("/callback")
@@ -63,7 +70,7 @@ public class AutorizacaoController {
         requestBody.add("grant_type", "authorization_code");
         requestBody.add("client_id", CLIENT_ID);
         requestBody.add("client_secret", CLIENT_SECRET);
-        requestBody.add("redirect_uri", REDIRECT_URI);
+        requestBody.add("redirect_uri", "https://hubspot-production-e626.up.railway.app/auth/callback");
         requestBody.add("code", code);
 
         // Configurando os cabeçalhos da requisição
@@ -77,7 +84,7 @@ public class AutorizacaoController {
         RestTemplate restTemplate = new RestTemplate();
         try {
             // Envia a requisição e recebe a resposta
-            ResponseEntity<String> response = restTemplate.exchange(TOKEN_URL, HttpMethod.POST, requestEntity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange("https://api.hubapi.com/oauth/v1/token", HttpMethod.POST, requestEntity, String.class);
             
          // Processar a resposta JSON
             String jsonResponse = response.getBody();

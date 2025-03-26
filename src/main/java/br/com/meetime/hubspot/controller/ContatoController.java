@@ -1,6 +1,4 @@
 package br.com.meetime.hubspot.controller;
-
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -32,11 +30,9 @@ import br.com.meetime.hubspot.model.Token;
 import br.com.meetime.hubspot.repository.TokenRepository;
 import br.com.meetime.hubspot.service.TokenService;
 
-
-
 @RestController
 @RequestMapping("/contato")
-public class ContratoController {
+public class ContatoController {
 
 	@Autowired
 	private TokenRepository tokenRepository;

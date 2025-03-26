@@ -46,7 +46,7 @@
             font-weight: bold;
             transition: 0.3s;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-top:10px;
+            cursor: pointer;
         }
         .btn:hover {
             background: #004a99;
@@ -59,12 +59,12 @@
         <h1>Bem Vindo ao HubSpot</h1>
          <input type="text" placeholder="Client_Id" id="clientId" required>
          <input type="text" placeholder="Client_Secret" id="clientSecret" required>
-         <button class="btn" onclick="salvarContato()">Autorizar</button>
+         <button class="btn" onclick="autorizar()">Autorizar</button>
         
          <div id="message"></div>
     </div>
     <script>
-    function salvarContato() {
+    function autorizar() {
         const clientId = document.getElementById('clientId').value.trim();
         const clientSecret = document.getElementById('clientSecret').value.trim();
 
@@ -78,7 +78,7 @@
         	clientSecret: clientSecret
         };
 
-        fetch('https://hubspot-production-e626.up.railway.app/auth/authorize', {
+        fetch('/auth/authorize', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
